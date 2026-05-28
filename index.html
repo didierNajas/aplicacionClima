@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+        Content-Security-Policy: En producción, configura este header en el servidor.
+        Aquí se incluye como meta de referencia. Para producción real, usar header HTTP.
+        Política recomendada:
+        Content-Security-Policy: default-src 'self'; connect-src https://api.open-meteo.com https://geocoding-api.open-meteo.com; script-src 'self'; style-src 'self';
+    -->
+    <title>Clima Fácil</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+    <!--
+        Banner de consentimiento de geolocalización.
+        Oculto por defecto. Se muestra solo cuando el usuario hace clic en
+        "Usar mi ubicación". Cumple con GDPR Art. 7 y Ley 1581 (Colombia).
+    -->
+    <div id="consent-banner" class="consent-banner hidden" role="dialog" aria-modal="true" aria-labelledby="consent-title">
+        <div class="consent-content">
+            <h2 id="consent-title">Permiso de ubicación</h2>
+            <p>
+                Esta aplicación solicita acceso a tu ubicación geográfica
+                <strong>únicamente</strong> para consultar el clima de tu zona.
+                Tu ubicación <strong>no se almacena</strong> ni se comparte con terceros.
+                Solo se usa durante esta consulta.
+            </p>
+            <p class="consent-legal">
+                Datos meteorológicos provistos por
+                <a href="https://open-meteo.com" target="_blank" rel="noopener noreferrer">Open-Meteo</a>
+                (licencia CC BY 4.0). No se recopilan datos personales.
+            </p>
+            <div class="consent-actions">
+                <button id="consent-accept" type="button">Permitir ubicación</button>
+                <button id="consent-reject" type="button" class="btn-secondary">No permitir</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="app-shell">
+        <section class="hero-card">
+            <div class="hero-text">
+                <span class="eyebrow">Clima en un clic</span>
+                <h1>Busca el clima por ciudades</h1>
+                <p>
+                    Ingresa una o varias ciudades separadas por comas para comparar
+                    el clima actual y obtener un pronóstico de 5 días.
+                </p>
+            </div>
+
+            <form id="clima-form" class="search-form" novalidate>
+                <label for="ciudad-input">Ciudad(es)</label>
+                <div class="input-group">
+                    <input
+                        id="ciudad-input"
+                        type="text"
+                        placeholder="Ej. Madrid, Bogotá, Lisboa"
+                        autocomplete="off"
+                        maxlength="500"
+                        aria-describedby="input-help"
+                    />
+                    <button type="submit">Buscar</button>
+                </div>
+                <label class="checkbox-label">
+                    <input id="forecast-checkbox" type="checkbox" />
+                    Mostrar pronóstico de 5 días para la primera ciudad
+                </label>
+                <p id="input-help" class="help-text">
+                    Puedes ingresar hasta 10 ciudades separadas por comas.
+                    El pronóstico aplica a la primera ciudad si habilitas la opción.
+                </p>
+            </form>
+
+            <!-- Botón de geolocalización — requiere consentimiento explícito -->
+            <div class="location-section">
+                <button id="location-btn" type="button" class="btn-secondary btn-location">
+                    📍 Usar mi ubicación
+                </button>
+                <p class="help-text">
+                    Se solicitará tu permiso antes de acceder a la ubicación.
+                </p>
+            </div>
+
+            <div id="mensaje" class="message-card hidden" role="alert" aria-live="polite"></div>
+            <div id="resultado" class="resultado-grid hidden" aria-live="polite"></div>
+            <div id="forecast" class="forecast-section hidden" aria-live="polite"></div>
+
+            <!-- Atribución requerida por licencia CC BY 4.0 de Open-Meteo -->
+            <footer class="attribution">
+                Datos meteorológicos por
+                <a href="https://open-meteo.com" target="_blank" rel="noopener noreferrer">Open-Meteo</a>
+                (CC BY 4.0) · Geocodificación por
+                <a href="https://open-meteo.com/en/docs/geocoding-api" target="_blank" rel="noopener noreferrer">Open-Meteo Geocoding</a>
+                (CC BY 4.0)
+            </footer>
+        </section>
+    </main>
+
+    <script src="clima.js"></script>
+</body>
+</html>
